@@ -21,4 +21,7 @@ public class Establishment {
 
     @OneToMany(mappedBy = "establishment")
     private List<User> user;
+
+    @OneToMany(mappedBy = "establishment")
+    private List<Product> products;
 }

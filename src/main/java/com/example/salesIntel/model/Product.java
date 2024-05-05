@@ -41,4 +41,7 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<SalesProducts> salesProducts;
+
+    @ManyToOne
+    private Establishment establishment;
 }
