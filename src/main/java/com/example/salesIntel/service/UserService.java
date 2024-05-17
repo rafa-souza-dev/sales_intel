@@ -23,31 +23,34 @@ public class UserService {
 	}
 	
 	public User getUserById(Long id) throws SalesException {
-		Optional<User> user = repository.findById(id);
-		if(user.isEmpty()) {
-			throw new SalesException("There is no user associated with this id");
-		}		
-		return user.get();
+		User user = repository.findById(id).orElseThrow(()  
+				-> new SalesException("There is no user associated with this id"));
+		return user;
 	}
 	
 	public User getUserByEmail(String email) throws SalesException {
-		Optional<User> user = repository.findByEmail(email);
-		if(user.isEmpty()) {
-			throw new SalesException("There is no user associated with this email");
-		}		
-		return user.get();
+		User user = repository.findByEmail(email).orElseThrow(()  
+				-> new SalesException("There is no user associated with this id"));
+		return user;
+	}
+	
+	public User getUserByCompany(String company) throws SalesException {
+		User user = repository.findByCompany(company).orElseThrow(()  
+				-> new SalesException("There is no user associated with this id"));
+		return user;
 		
 	}
 	
+		
 	public void createUser(UserDTO userDTO) throws SalesException {
 		Optional<User> userExist = repository.findByEmail(userDTO.getEmail());
 		if(userExist.isPresent()) {
-			throw new SalesException("This email is beeing used");
+			throw new SalesException("This email is already beeing used");
 		}
 		
 		User user = new User();
 		user.setEmail(userDTO.getEmail());
-		user.setFullName(userDTO.getFullName());
+		user.setCompany(userDTO.getCompany());
 		user.setPassword(userDTO.getPassword());
 		repository.save(user);
 	}
@@ -55,7 +58,7 @@ public class UserService {
 	public User updateUser(Long id, UserDTO userDTO) throws SalesException {
 		User user = getUserById(id);
 		user.setEmail(userDTO.getEmail());
-		user.setFullName(userDTO.getFullName());		
+		user.setCompany(userDTO.getCompany());		
 		repository.save(user);
 		
 		return user;
