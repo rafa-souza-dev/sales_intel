@@ -10,6 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 public class Category {
+	
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
