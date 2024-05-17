@@ -20,14 +20,23 @@ public class Product {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String description;
+    @Column(nullable = false)
+    private Float purchasePrice;
+    
+    @Column(nullable = false)
+    private Float salePrice;
 
     @Column(nullable = false)
-    private Float price;
-
+    private Integer quantity;
+    
     @Column(nullable = false)
-    private Integer availableQuantity;
+    private String unit;
+    
+    @Column(nullable = false)
+    private Date expiration;
+    
+    @Column(nullable = false)
+    private Integer batch;
 
     @CreatedDate
     private Date createdAt;
@@ -43,5 +52,5 @@ public class Product {
     private List<SalesProducts> salesProducts;
 
     @ManyToOne
-    private Establishment establishment;
+    private User user;
 }
