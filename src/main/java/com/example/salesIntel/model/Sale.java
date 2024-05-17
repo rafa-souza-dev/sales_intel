@@ -16,6 +16,8 @@ public class Sale {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
+    private Integer value;
 
     @CreatedDate
     private Date createdAt;
@@ -25,4 +27,7 @@ public class Sale {
 
     @OneToMany(mappedBy = "sale")
     private List<SalesProducts> salesProducts;
+    
+    @ManyToOne
+    private User user;
 }
