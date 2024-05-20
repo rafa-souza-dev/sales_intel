@@ -3,9 +3,11 @@ package com.example.salesIntel.model.dtos;
 import java.util.Date;
 
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class ProductDTO {
 	
 	@Size(max = 255, min = 3)

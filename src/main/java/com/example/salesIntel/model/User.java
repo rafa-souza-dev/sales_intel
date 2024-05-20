@@ -3,8 +3,7 @@ package com.example.salesIntel.model;
 import java.util.List;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 //import org.springframework.security.core.GrantedAuthority;
 //import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,8 +12,11 @@ import lombok.Setter;
 @Entity(name = "users")
 @Setter
 @Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
-	
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -24,10 +26,10 @@ public class User {
     private String email;
 
     private String password;
-    
+
     @OneToMany(mappedBy = "user")
     private List<Product> products;
-    
+
     @OneToMany(mappedBy = "user")
     private List<Sale> sales;
 

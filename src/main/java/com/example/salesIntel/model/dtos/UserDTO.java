@@ -1,9 +1,11 @@
 package com.example.salesIntel.model.dtos;
 
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class UserDTO {
 	
     @Size(max = 255, min = 3)
