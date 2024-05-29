@@ -17,7 +17,7 @@ public class Sale {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    private Integer value;
+    private float value;
 
     @CreatedDate
     private Date createdAt;

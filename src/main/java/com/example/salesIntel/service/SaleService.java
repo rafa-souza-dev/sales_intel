@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.salesIntel.model.Sale;
+import com.example.salesIntel.model.SalesProducts;
 import com.example.salesIntel.model.dtos.SaleDTO;
 import com.example.salesIntel.repository.SaleRepository;
 import com.example.salesIntel.utils.SalesException;
@@ -29,7 +30,15 @@ public class SaleService {
 	
 	public void createSale(SaleDTO dto) {
 		Sale sale = new Sale();
-		sale.setValue(dto.getValue());
+		float value = 0;
+		
+		sale.setSalesProducts(dto.getSalesProducts());
+		
+		for(SalesProducts sales : dto.getSalesProducts()) {
+			value += sales.getProduct().getSalePrice() * sales.getQuantity();			
+		}
+		sale.setValue(value);
+		
 		repository.save(sale);
 	}
 	
