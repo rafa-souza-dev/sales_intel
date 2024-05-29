@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.salesIntel.controller.responses.UserResponse;
 import com.example.salesIntel.model.User;
+import com.example.salesIntel.model.dtos.LoginDTO;
 import com.example.salesIntel.model.dtos.UserDTO;
 import com.example.salesIntel.service.UserService;
 import com.example.salesIntel.utils.SalesException;
@@ -62,7 +63,7 @@ public class UserController {
 		}
 	}
 	
-	@PostMapping
+	@PostMapping("auth")
 	public ResponseEntity<?> createUser(@RequestBody UserDTO dto){
 		try {
 			service.createUser(dto);
@@ -70,6 +71,16 @@ public class UserController {
 		} catch(SalesException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
+	}
+	
+	@PostMapping("auth/login")
+	public ResponseEntity<?> login(@RequestBody LoginDTO dto){
+		try {
+			return ResponseEntity.ok(service.login(dto));
+		} catch (SalesException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+		
 	}
 	
 	@PutMapping("/{id}")
