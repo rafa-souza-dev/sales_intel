@@ -38,18 +38,20 @@ public class SalesProductsService {
 	}	
 	
 	
-	public void createSalesProducts(SalesProductsDTO dto) throws SalesException {
-		
-		Sale sale = saleService.getById(dto.getSaleId());
-		
+	public SalesProducts createSalesProducts(SalesProductsDTO dto) throws SalesException {		
 		Product product = productService.getById(dto.getProductId());
+		
+		if(dto.getQuantity() > product.getQuantity()) {
+			throw new SalesException("Quantity unavailable");
+		}
 		
 		SalesProducts saleP = new SalesProducts();
 		
 		saleP.setQuantity(dto.getQuantity());
 		saleP.setProduct(product);
-		saleP.setSale(sale);
 		repository.save(saleP);
+		
+		return saleP;
 	}
 	
 	

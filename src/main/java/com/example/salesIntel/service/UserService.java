@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.salesIntel.config.JwtService;
+import com.example.salesIntel.controller.responses.LoginResponse;
 import com.example.salesIntel.model.User;
 import com.example.salesIntel.model.dtos.LoginDTO;
 import com.example.salesIntel.model.dtos.UserDTO;
@@ -38,7 +39,7 @@ public class UserService {
 	
 	public User getUserByEmail(String email) throws SalesException {
 		User user = repository.findByEmail(email).orElseThrow(()  
-				-> new SalesException("There is no user associated with this id"));
+				-> new SalesException("There is no user associated with this email"));
 		return user;
 	}
 	
@@ -47,8 +48,7 @@ public class UserService {
 				-> new SalesException("There is no user associated with this id"));
 		return user;
 		
-	}
-	
+	}	
 		
 	public void createUser(UserDTO userDTO) throws SalesException {
 		Optional<User> userExist = repository.findByEmail(userDTO.getEmail());
@@ -63,12 +63,14 @@ public class UserService {
 		repository.save(user);
 	}
 	
-	public String login(LoginDTO login) throws SalesException{
+	public LoginResponse login(LoginDTO login) throws SalesException{
 		User user = repository.findByEmail(login.getEmail()).orElseThrow(() -> new SalesException("There is no user associated with this email"));
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword()));
         String jwtToken = jwtService.generateToken(user);
-        
-        return jwtToken;
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setToken(jwtToken);
+
+        return loginResponse;
 	}
 	
 	public User updateUser(Long id, UserDTO userDTO) throws SalesException {
