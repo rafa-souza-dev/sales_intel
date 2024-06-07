@@ -22,7 +22,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable).cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configure(http))
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
 		                        .requestMatchers("/user/auth/**", "/v3/**", "/swagger-ui/**")
