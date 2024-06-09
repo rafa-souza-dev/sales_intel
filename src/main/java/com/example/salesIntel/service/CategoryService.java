@@ -29,7 +29,7 @@ public class CategoryService {
 	
 	public Category getByName(String name) throws SalesException {
 		return repository.findByName(name).orElseThrow(
-				() -> new SalesException("There is no category associated with this id")) ;
+				() -> new SalesException("There is no category associated with this name")) ;
 	}
 	
 	public void createCategory(CategoryDTO dto) throws SalesException {
