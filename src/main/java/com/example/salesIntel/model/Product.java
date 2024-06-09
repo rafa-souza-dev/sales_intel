@@ -47,7 +47,7 @@ public class Product {
     private Date updatedAt;
 
     @JoinColumn(nullable = false)
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Category category;
 
     @OneToMany(mappedBy = "product")
