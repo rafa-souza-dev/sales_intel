@@ -15,12 +15,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.salesIntel.config.JwtService;
 import com.example.salesIntel.controller.responses.ProductResponse;
 import com.example.salesIntel.model.Product;
 import com.example.salesIntel.model.dtos.ProductDTO;
 import com.example.salesIntel.service.ProductService;
 import com.example.salesIntel.utils.SalesException;
 
+
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RequestMapping("/products")
@@ -29,6 +32,8 @@ import lombok.RequiredArgsConstructor;
 public class ProductController {
 	
 	private final ProductService service;
+	
+	private final JwtService jwtService;
 	
 	
 	@GetMapping
@@ -45,7 +50,15 @@ public class ProductController {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
-	
+	@GetMapping("/token")
+	public ResponseEntity<?> getByToken(HttpServletRequest request){
+		String email = jwtService.extractUsername(request.getHeader("Authorization").substring(7));
+		try {
+			return ResponseEntity.ok(service.getProductByUsername(email).stream().map(this::convert).collect(Collectors.toList()));
+		} catch (SalesException e){
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
 	@GetMapping("user/{id}")
 	public ResponseEntity<?> getByUser(@PathVariable Long id){
 		try {

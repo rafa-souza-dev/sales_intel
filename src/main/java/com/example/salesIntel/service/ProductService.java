@@ -37,6 +37,11 @@ public class ProductService {
 		return user.getProducts();		
 	}
 	
+	public List<Product> getProductByUsername(String email) throws SalesException {
+		User user = userService.getUserByEmail(email);		
+		return user.getProducts();		
+	}
+		
 	public List<Product> getProductByCategoryId(Long id) throws SalesException {
 		Category category = categoryService.getById(id);
 		return category.getProducts();
@@ -85,4 +90,5 @@ public class ProductService {
 		Product product = getById(id);
 		repository.delete(product);
 	}
+	
 }
