@@ -9,6 +9,5 @@ public class SalesProductsDTO {
 
     private Long productId;
 
-    private Long saleId;
 
 }

@@ -5,12 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserResponse {
+public class LoginResponse {
 	
-	private Long id;
-	
-	private String company;
-	
-	private String email;
-	
+	private String token;
+
 }
