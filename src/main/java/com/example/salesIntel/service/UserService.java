@@ -64,8 +64,8 @@ public class UserService {
 	}
 	
 	public LoginResponse login(LoginDTO login) throws SalesException{
-		User user = repository.findByEmail(login.getEmail()).orElseThrow(() -> new SalesException("There is no user associated with this email"));
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword()));
+        User user = getUserByEmail(login.getEmail());
         String jwtToken = jwtService.generateToken(user);
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setToken(jwtToken);

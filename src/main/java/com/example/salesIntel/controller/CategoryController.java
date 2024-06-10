@@ -45,7 +45,7 @@ public class CategoryController {
 		}
 	}
 	
-	@GetMapping("/name/{id}")
+	@GetMapping("/name/{name}")
 	public ResponseEntity<?> getByName(@PathVariable String name){
 		try {
 			return ResponseEntity.ok(convert(service.getByName(name)));
