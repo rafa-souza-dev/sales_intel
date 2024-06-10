@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.salesIntel.config.JwtService;
 import com.example.salesIntel.controller.responses.UserResponse;
 import com.example.salesIntel.model.User;
 import com.example.salesIntel.model.dtos.LoginDTO;
@@ -22,6 +23,7 @@ import com.example.salesIntel.model.dtos.UserDTO;
 import com.example.salesIntel.service.UserService;
 import com.example.salesIntel.utils.SalesException;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -30,6 +32,8 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 	
 	private final UserService service;
+	
+	private final JwtService jwtService;
 	
 	@GetMapping
 	public ResponseEntity<List<UserResponse>> getUsers(){
@@ -53,7 +57,15 @@ public class UserController {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
-	
+	@GetMapping("token")
+	public ResponseEntity<?> getByToken(HttpServletRequest request){
+		String email = jwtService.extractUsername(request.getHeader("Authorization").substring(7));
+		try {
+			return ResponseEntity.ok(convert(service.getUserByEmail(email)));
+		} catch (SalesException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
 	@GetMapping("company/{company}")
 	public ResponseEntity<?> getByComapny(@PathVariable String company){
 		try {
