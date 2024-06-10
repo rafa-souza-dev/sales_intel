@@ -98,6 +98,6 @@ class CategoryServiceTest {
     void deleteCategory() throws SalesException {
         service.deleteCategory(1L);
         verify(repository, times(1)).findById(1L);
-        verify(repository, times(1)).deleteById(1L);
+        verify(repository, times(1)).delete(any());
     }
 }

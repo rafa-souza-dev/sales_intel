@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,9 @@ class UserServiceTest {
     @Mock
     private UserRepository repository;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @InjectMocks
     private UserService service;
 
@@ -29,6 +33,7 @@ class UserServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        when(passwordEncoder.encode(any())).thenReturn("passwordEncode");
         users = List.of(
                 User.builder()
                         .id(1L)
@@ -116,7 +121,6 @@ class UserServiceTest {
         service.createUser(userDTO);
 
         verify(repository, times(1)).findByEmail(user.getEmail());
-        verify(repository, times(1)).findByCompany(user.getCompany());
         verify(repository, times(1)).save(any());
 
     }
