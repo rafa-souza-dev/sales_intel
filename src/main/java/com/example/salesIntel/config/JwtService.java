@@ -7,6 +7,7 @@ import java.util.function.Function;
 
 import javax.crypto.SecretKey;
 
+import com.example.salesIntel.model.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -33,20 +34,18 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateToken(User user) {
+        return generateToken(new HashMap<>(), user);
     }
 
-    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return Jwts.builder().claims(extraClaims).subject(userDetails.getUsername())
-        		.issuedAt(new Date(System.currentTimeMillis()))
-        		.expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-        		.signWith(getSignInKey(), Jwts.SIG.HS256).compact();
+    public String generateToken(Map<String, Object> extraClaims, User user) {
+        return generateToken(extraClaims, user, EXPIRATION_TIME);
     }
 
-    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails, int expirationTime) {
-        return Jwts.builder().claims(extraClaims).subject(userDetails.getUsername())
+    public String generateToken(Map<String, Object> extraClaims, User user, int expirationTime) {
+        return Jwts.builder().claims(extraClaims).subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
+                .claim("company", user.getCompany())
                 .expiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(getSignInKey(), Jwts.SIG.HS256).compact();
     }

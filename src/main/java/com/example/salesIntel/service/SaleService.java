@@ -1,22 +1,23 @@
 package com.example.salesIntel.service;
 
 import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.example.salesIntel.model.Sale;
-import com.example.salesIntel.model.SalesProducts;
 import com.example.salesIntel.model.dtos.SaleDTO;
 import com.example.salesIntel.repository.SaleRepository;
 import com.example.salesIntel.utils.SalesException;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class SaleService {
 	
 	private final SaleRepository repository;
+
+	private final ProductService productService;
 	
 	
 	public List<Sale> getAll(){
@@ -28,20 +29,11 @@ public class SaleService {
 				-> new SalesException("There is no sale associated to this id"));
 	}
 	
-	public void createSale(SaleDTO dto) {
+	@Transactional
+    public void createSale(SaleDTO dto) throws SalesException {
 		Sale sale = new Sale();
-		float value = 0;
-		
-		sale.setSalesProducts(dto.getSalesProducts());
-		
-		for(SalesProducts sales : dto.getSalesProducts()) {
-			value += sales.getProduct().getSalePrice() * sales.getQuantity();			
-		}
-		sale.setValue(value);
-		
+		sale.setProduct(productService.getById(dto.getProductId()));
+		sale.setValue(dto.getValue() * dto.getQuantity());
 		repository.save(sale);
 	}
-	
-
- 
 }

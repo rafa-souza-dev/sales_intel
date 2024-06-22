@@ -1,6 +1,6 @@
 package com.example.salesIntel.utils;
 
-public class SalesException extends Exception {
+public class SalesException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 	

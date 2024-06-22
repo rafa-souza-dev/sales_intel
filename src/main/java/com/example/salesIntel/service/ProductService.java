@@ -28,8 +28,8 @@ public class ProductService {
 	}
 	
 	public Product getById(Long id) throws SalesException {
-		return repository.findById(id).orElseThrow(() -> 
-			new SalesException("There is not product associated with this id"));
+		return repository.findById(id).orElseThrow(() ->
+				new SalesException("There is not product associated with this id"));
 	}
 	
 	public List<Product> getProductByUserId(Long id) throws SalesException {

@@ -45,8 +45,12 @@ public class SaleController {
 	
 	@PostMapping
 	public ResponseEntity<?> createSale(@RequestBody SaleDTO sale){
-		service.createSale(sale);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		try {
+			service.createSale(sale);
+			return ResponseEntity.status(HttpStatus.CREATED).build();
+		} catch (SalesException e){
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 	
 	private SaleResponse convert (Sale sale) {

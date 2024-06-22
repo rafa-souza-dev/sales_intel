@@ -2,8 +2,8 @@ package com.example.salesIntel.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.util.Date;
 import java.util.List;
@@ -40,7 +40,7 @@ public class Product {
     @Column(nullable = false)
     private Integer batch;
 
-    @CreatedDate
+    @CreationTimestamp
     private Date createdAt;
 
     @UpdateTimestamp
@@ -51,7 +51,7 @@ public class Product {
     private Category category;
 
     @OneToMany(mappedBy = "product")
-    private List<SalesProducts> salesProducts;
+    private List<Sale> sales;
 
     @ManyToOne
     private User user;

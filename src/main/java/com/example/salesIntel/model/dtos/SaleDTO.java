@@ -1,16 +1,16 @@
 package com.example.salesIntel.model.dtos;
 
-import java.util.List;
-
-import com.example.salesIntel.model.SalesProducts;
-
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class SaleDTO {
 	
 	private float value;
+
+	private int quantity;
 	
-	private List<SalesProducts> salesProducts;
+	private Long productId;
 
 }

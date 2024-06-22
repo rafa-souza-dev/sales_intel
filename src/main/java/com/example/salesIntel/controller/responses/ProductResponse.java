@@ -32,8 +32,6 @@ public class ProductResponse {
 
     private Long categoryId;
 
-    private List<SalesProductsResponse> salesProducts;
-
     private Long userId;
 
 }
