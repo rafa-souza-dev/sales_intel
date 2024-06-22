@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  api:
+    container_name: salesAPI
+    image: springboot
+    build: ./
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgresql
+    environment:
+      SECRET_KEY: "4428472D4B6150645367566B5970337336763979244226452948404D62516554"
+
+  postgresql:
+    container_name: salesBD
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: salesBD
+      POSTGRES_USER: postgres
