@@ -7,8 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class SaleDTO {
 	
-	private float value;
-
 	private int quantity;
 	
 	private Long productId;

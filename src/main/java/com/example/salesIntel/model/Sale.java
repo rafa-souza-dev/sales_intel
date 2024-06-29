@@ -24,6 +24,8 @@ public class Sale {
 
     @UpdateTimestamp
     private Date updatedAt;
+    
+    private int quantity;
 
     @ManyToOne
     private Product product;

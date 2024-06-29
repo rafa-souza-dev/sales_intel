@@ -3,6 +3,7 @@ package com.example.salesIntel.service;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
+import com.example.salesIntel.model.Product;
 import com.example.salesIntel.model.Sale;
 import com.example.salesIntel.model.dtos.SaleDTO;
 import com.example.salesIntel.repository.SaleRepository;
@@ -32,8 +33,11 @@ public class SaleService {
 	@Transactional
     public void createSale(SaleDTO dto) throws SalesException {
 		Sale sale = new Sale();
-		sale.setProduct(productService.getById(dto.getProductId()));
-		sale.setValue(dto.getValue() * dto.getQuantity());
+		Product product = productService.getById(dto.getProductId());
+		sale.setProduct(product);
+		sale.setQuantity(dto.getQuantity());
+		float value = product.getSalePrice() * dto.getQuantity();
+		sale.setValue(value);
 		repository.save(sale);
 	}
 }
