@@ -10,6 +10,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class SaleResponse {
+    private Long id;
 
     private float value;
 
