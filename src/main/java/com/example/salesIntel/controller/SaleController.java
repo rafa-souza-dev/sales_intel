@@ -1,11 +1,11 @@
 package com.example.salesIntel.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,6 +48,19 @@ public class SaleController {
 		try {
 			service.createSale(sale);
 			return ResponseEntity.status(HttpStatus.CREATED).build();
+		} catch (SalesException e){
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+
+	@PostMapping("/csv")
+	public ResponseEntity<?> createSalesCsv(){
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.parseMediaType("text/csv"));
+			headers.setContentDisposition(ContentDisposition.attachment()
+					.filename("relatorio-" + LocalDateTime.now() + ".csv").build());
+			return ResponseEntity.ok().headers(headers).body(service.generateSalesCsv());
 		} catch (SalesException e){
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
