@@ -4,14 +4,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.salesIntel.model.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.salesIntel.controller.responses.SaleResponse;
 import com.example.salesIntel.model.Sale;
@@ -29,9 +26,8 @@ public class SaleController {
 	private final SaleService service;
 	
 	@GetMapping
-	public ResponseEntity<List<SaleResponse>> getAll(){
-		return ResponseEntity.ok(service.getAll().stream().map(this::convert).collect(Collectors.toList()));
-		
+	public ResponseEntity<List<SaleResponse>> getAll(@AuthenticationPrincipal User user){
+		return ResponseEntity.ok(service.getAllByUserId(user.getId()).stream().map(this::convert).collect(Collectors.toList()));
 	}
 	
 	@GetMapping("/{id}")
@@ -54,13 +50,23 @@ public class SaleController {
 	}
 
 	@PostMapping("/csv")
-	public ResponseEntity<?> createSalesCsv(){
+	public ResponseEntity<?> createSalesCsv(@AuthenticationPrincipal User user){
 		try {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.parseMediaType("text/csv"));
 			headers.setContentDisposition(ContentDisposition.attachment()
 					.filename("relatorio-" + LocalDateTime.now() + ".csv").build());
-			return ResponseEntity.ok().headers(headers).body(service.generateSalesCsv());
+			return ResponseEntity.ok().headers(headers).body(service.generateSalesCsv(user.getId()));
+		} catch (SalesException e){
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> createSalesCsv(@PathVariable Long id){
+		try {
+			service.deleteSales(id);
+			return ResponseEntity.noContent().build();
 		} catch (SalesException e){
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}

@@ -3,9 +3,11 @@ package com.example.salesIntel.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.salesIntel.model.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,9 +39,8 @@ public class ProductController {
 	
 	
 	@GetMapping
-	public ResponseEntity<List<ProductResponse>> getAll(){
-		return ResponseEntity.ok(service.getAll().stream().map(this::convert).collect(Collectors.toList()));
-		
+	public ResponseEntity<List<ProductResponse>> getAll(@AuthenticationPrincipal User user){
+		return ResponseEntity.ok(service.getAllByUserId(user.getId()).stream().map(this::convert).collect(Collectors.toList()));
 	}
 	
 	@GetMapping("/{id}")
@@ -95,15 +96,11 @@ public class ProductController {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
-	
+
+	@Deprecated
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteProduct(@PathVariable Long id){
-		try {
-			service.deleteProduct(id);
-			return ResponseEntity.noContent().build();
-		} catch (SalesException e){
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+		return ResponseEntity.status(HttpStatus.GONE).build();
 	}
 	
 	private ProductResponse convert (Product product) {

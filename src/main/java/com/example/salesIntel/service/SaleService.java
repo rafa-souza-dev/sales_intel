@@ -28,8 +28,8 @@ public class SaleService {
 	private final ProductService productService;
 	
 	
-	public List<Sale> getAll(){
-		return repository.findAll();		
+	public List<Sale> getAllByUserId(Long userId){
+		return repository.getAllByUserId(userId);
 	}
 	
 	public Sale getById(Long id) throws SalesException {
@@ -48,11 +48,10 @@ public class SaleService {
 		repository.save(sale);
 	}
 
-	public byte[] generateSalesCsv() throws SalesException {
+	public byte[] generateSalesCsv(Long userId) throws SalesException {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		OutputStreamWriter file = new OutputStreamWriter(outputStream);
-		List<Sale> sales = repository.findAll();
-
+		List<Sale> sales = repository.getAllByUserId(userId);
 		try {
 			StatefulBeanToCsv<SaleCsv> beanToCsv = new StatefulBeanToCsvBuilder<SaleCsv>(file).build();
 			beanToCsv.write(sales.stream().map(SaleCsv::new));
@@ -62,5 +61,10 @@ public class SaleService {
 		} catch (Exception e) {
 			throw new SalesException("Error generating csv file");
 		}
+	}
+
+	public void deleteSales(Long id) {
+		Sale sale = getById(id);
+		repository.delete(sale);
 	}
 }

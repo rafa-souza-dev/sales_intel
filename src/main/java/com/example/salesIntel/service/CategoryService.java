@@ -49,7 +49,7 @@ public class CategoryService {
 			throw new SalesException("This category has already been registered");
 		}
 		cat.setName(dto.getName());		
-		return cat;
+		return repository.save(cat);
 		
 	}
 	

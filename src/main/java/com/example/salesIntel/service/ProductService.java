@@ -23,8 +23,8 @@ public class ProductService {
 	
 	private final UserService userService;
 	
-	public List<Product> getAll(){
-		return repository.findAll();
+	public List<Product> getAllByUserId(Long userId) {
+		return repository.getAllByUserId(userId);
 	}
 	
 	public Product getById(Long id) throws SalesException {
