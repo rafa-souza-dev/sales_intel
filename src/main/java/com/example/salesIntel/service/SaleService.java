@@ -3,9 +3,7 @@ package com.example.salesIntel.service;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.List;
-
-import com.example.salesIntel.controller.responses.SaleResponse;
-import com.example.salesIntel.model.SaleCsv;
+import com.example.salesIntel.model.SaleVO;
 import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import org.springframework.stereotype.Service;
@@ -51,15 +49,17 @@ public class SaleService {
 	public byte[] generateSalesCsv(Long userId) throws SalesException {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		OutputStreamWriter file = new OutputStreamWriter(outputStream);
-		List<Sale> sales = repository.getAllByUserId(userId);
+		List<Product> products = productService.getAllByUserId(userId);
 		try {
-			StatefulBeanToCsv<SaleCsv> beanToCsv = new StatefulBeanToCsvBuilder<SaleCsv>(file).build();
-			beanToCsv.write(sales.stream().map(SaleCsv::new));
+			StatefulBeanToCsv<SaleVO> beanToCsv = new StatefulBeanToCsvBuilder<SaleVO>(file).build();
+			List<SaleVO> saleVOs = products.stream().map(SaleVO::new).toList();
+			beanToCsv.write(saleVOs);
+			beanToCsv.write(new SaleVO(saleVOs));
 			file.flush();
 			file.close();
 			return outputStream.toByteArray();
 		} catch (Exception e) {
-			throw new SalesException("Error generating csv file");
+			throw new SalesException("Error generating csv file!");
 		}
 	}
 
