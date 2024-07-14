@@ -40,6 +40,10 @@ public class SaleService {
 		Sale sale = new Sale();
 		Product product = productService.getById(dto.getProductId());
 		sale.setProduct(product);
+		if (product.getQuantity() < dto.getQuantity()) {
+			throw new SalesException("The product has less than " + dto.getQuantity());
+		}
+		product.setQuantity(product.getQuantity() - dto.getQuantity());
 		sale.setQuantity(dto.getQuantity());
 		float value = product.getSalePrice() * dto.getQuantity();
 		sale.setValue(value);
