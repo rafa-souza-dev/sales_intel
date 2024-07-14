@@ -24,7 +24,7 @@ public class ProductService {
 	private final UserService userService;
 	
 	public List<Product> getAllByUserId(Long userId) {
-		return repository.getAllByUserId(userId);
+		return repository.getAllByUserId(userId).stream().filter(product -> !product.isDisable()).toList();
 	}
 	
 	public Product getById(Long id) throws SalesException {
