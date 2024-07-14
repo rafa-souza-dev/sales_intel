@@ -86,9 +86,10 @@ public class ProductService {
 		return product;
 	}
 	
-	public void deleteProduct(Long id) throws SalesException {
+	public void disableProduct(Long id) throws SalesException {
 		Product product = getById(id);
-		repository.delete(product);
+		product.setDisable(!product.isDisable());
+		repository.save(product);
 	}
 	
 }

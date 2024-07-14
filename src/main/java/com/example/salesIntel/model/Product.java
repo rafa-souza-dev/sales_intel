@@ -40,6 +40,8 @@ public class Product {
     @Column(nullable = false)
     private Integer batch;
 
+    private boolean isDisable;
+
     @CreationTimestamp
     private Date createdAt;
 

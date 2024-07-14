@@ -62,6 +62,21 @@ public class SaleController {
 		}
 	}
 
+	@PostMapping("/financeiro/csv")
+	public ResponseEntity<?> generateFinancialCsv(@AuthenticationPrincipal User user){
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.parseMediaType("text/csv"));
+			headers.setContentDisposition(ContentDisposition.attachment()
+					.filename("relatorio-" + LocalDateTime.now() + ".csv").build());
+			return ResponseEntity.ok().headers(headers).body(service.generateFinancialCsv(user.getId()));
+		} catch (SalesException e){
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+
+
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> createSalesCsv(@PathVariable Long id){
 		try {
